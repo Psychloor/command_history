@@ -4,6 +4,7 @@
 #![warn(clippy::correctness)]
 #![warn(clippy::complexity)]
 #![warn(clippy::suspicious)]
+#![warn(clippy::cargo)]
 #![allow(dead_code)]
 
 pub mod concurrent_command_history;
