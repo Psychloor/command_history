@@ -31,11 +31,19 @@ Contains the traits required for commands and command histories:
 
 ## Usage
 
-Add the following to your `Cargo.toml`:
+Add the following to your `Cargo.toml` to include the `command_history` library from crates.io:
 
 ```toml
 [dependencies]
-command_history = { path = "path/to/command_history" }
+command_history = "1.0.0"
+```
+
+Then, you can use the library in your project as follows:
+
+```rust
+use command_history::prelude::*;
+
+// Your command implementation and usage here
 ```
 
 ### Example

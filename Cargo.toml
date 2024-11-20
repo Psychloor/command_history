@@ -5,7 +5,7 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 authors = ["Psychloor"]
 description = "A library for managing command history in Rust applications."
-repository = "https://github.com/Psychloor/command_history/tree/main"
+repository = "https://github.com/Psychloor/command_history"
 keywords = ["command", "history", "library", "rust", "concurrency", "thread-safety", "multi-threading"]
 categories = ["concurrency", "thread-safety", "multi-threading", "library", "command", "history", "rust"]
 
