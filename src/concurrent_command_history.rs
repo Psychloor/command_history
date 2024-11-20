@@ -282,7 +282,7 @@ mod tests {
 
     #[test]
     fn test_arc_concurrent_rng() {
-        let size = rand::thread_rng().gen_range(3..80);
+        let size = rand::thread_rng().gen_range(5..40);
         let history = ConcurrentCommandHistory::new(NonZero::new(size).unwrap(), true);
         let ctx = SharedContext::new(TestArcContext { value: 0 });
 

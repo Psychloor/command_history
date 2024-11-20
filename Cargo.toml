@@ -3,6 +3,7 @@ name = "command_history"
 version = "1.0.0"
 edition = "2021"
 license = "MIT OR Apache-2.0"
+authors = ["Psychloor"]
 
 [dependencies]
 parking_lot = "0.12.3"
