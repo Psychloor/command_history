@@ -7,7 +7,7 @@ authors = ["Psychloor"]
 description = "A library for managing command history in Rust applications."
 repository = "https://github.com/Psychloor/command_history"
 keywords = ["command", "history", "concurrency", "thread-safety", "multi-threading"]
-categories = ["concurrency", "multi-threading", "library", "command", "history"]
+categories = ["Concurrency"]
 
 [dependencies]
 parking_lot = "0.12.3"
