@@ -14,4 +14,3 @@ pub trait MutableCommandHistory<C: MutableCommand> {
         }
     }
 }
-
