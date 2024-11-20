@@ -1,4 +1,3 @@
-
 /// A trait representing a command that can be executed, undone, and redone within a given context.
 ///
 /// This trait defines the basic operations for a command, including execution, undoing, and redoing.
@@ -21,6 +20,8 @@
 /// # Example
 ///
 /// ```
+/// use command_history::prelude::Command;
+///
 /// struct MyCommand;
 ///
 /// impl Command for MyCommand {
