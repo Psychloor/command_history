@@ -157,8 +157,9 @@ mod tests {
 
     #[test]
     fn test_default() {
-        let context: SharedContext<i32> = SharedContext::default();
-        assert_eq!(*context.lock(), i32::default());
+        type DefaultType = i32;
+        let context: SharedContext<DefaultType> = SharedContext::default();
+        assert_eq!(*context.lock(), DefaultType::default());
     }
 
     #[test]
