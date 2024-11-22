@@ -180,4 +180,66 @@ mod tests {
         let arc_ref: &Arc<Mutex<i32>> = context.as_ref();
         assert_eq!(*arc_ref.lock(), 100);
     }
+
+    #[test]
+    fn test_into_inner() {
+        let context = SharedContext::new(100);
+        let value = context.into_inner();
+        assert_eq!(value, 100);
+    }
+
+    #[test]
+    fn test_modify() {
+        let context = SharedContext::new(100);
+        context.modify(|value| *value += 10);
+        assert_eq!(*context.lock(), 110);
+    }
+
+    #[test]
+    #[should_panic(expected = "Multiple references to SharedContext exist")]
+    fn test_into_inner_should_panic() {
+        let context = SharedContext::new(100);
+        let _cloned_context = context.clone();
+        context.into_inner();
+    }
+
+    #[test]
+    fn test_try_lock() {
+        let context = SharedContext::new(5);
+
+        // Case 1: Successfully acquire the lock
+        {
+            let guard = context.try_lock();
+            assert!(
+                guard.is_some(),
+                "Expected try_lock to succeed but it failed"
+            );
+            let guard = guard.unwrap();
+            assert_eq!(*guard, 5);
+        }
+
+        // Case 2: Failing to acquire the lock when it's already held
+        {
+            let _guard = context.lock(); // This will hold the lock
+
+            assert!(
+                context.try_lock().is_none(),
+                "Expected try_lock to fail but it succeeded"
+            );
+        }
+
+        // Case 3: Release the lock and then successfully re-acquire it
+        // After _guard goes out of scope, the lock should be released
+        let guard = context.try_lock();
+        assert!(guard.is_some());
+        assert_eq!(*guard.unwrap(), 5);
+    }
+
+    #[test]
+    fn test_debug() {
+        let context = SharedContext::new(5);
+        assert_eq!(format!("{:?}", context), "SharedContext(5)");
+        let _guard = context.lock();
+        assert_eq!(format!("{:?}", context), "SharedContext(<locked>)");
+    }
 }
