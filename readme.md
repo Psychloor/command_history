@@ -1,6 +1,6 @@
 # Command History Library
 
-[![Build Status Main](https://img.shields.io/github/actions/workflow/status/Psychloor/command_history/rust.yml?branch=main)](https://github.com/Psychloor/command_history/actions)
+[![Build Status Main](https://img.shields.io/github/actions/workflow/status/Psychloor/command_history/rust.yml)](https://github.com/Psychloor/command_history/actions)
 
 ## Overview
 
