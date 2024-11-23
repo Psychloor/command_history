@@ -23,6 +23,7 @@ use std::borrow::Cow;
 ///
 /// ```
 /// use command_history::prelude::Command;
+/// use std::borrow::Cow;
 ///
 /// struct MyCommand;
 ///
@@ -37,8 +38,8 @@ use std::borrow::Cow;
 ///         println!("Undoing command");
 ///     }
 ///
-///     fn description(&self) -> &str {
-///         "My custom command"
+///     fn description(&self) -> Cow<'_, str> {
+///         Cow::Borrowed("Unknown command")
 ///     }
 /// }
 ///
