@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 /// A trait representing a mutable command that can be executed, undone, and redone.
 ///
 /// # Associated Types
@@ -12,7 +14,7 @@
 /// # Provided Methods
 ///
 /// * `redo(&self, ctx: &mut Self::Context)`: Redoes the command by calling `execute` again. This method can be overridden if needed.
-/// * `description(&self) -> &str`: Returns a description of the command. The default implementation returns "Unknown command".
+/// * `description(&self) -> Cow<str>`: Returns a description of the command. The default implementation returns "Unknown command".
 pub trait MutableCommand {
     type Context;
 
@@ -44,7 +46,7 @@ pub trait MutableCommand {
     /// # Returns
     ///
     /// A string slice that holds the description of the command.
-    fn description(&self) -> &str {
-        "Unknown command"
+    fn description(&self) -> Cow<'_, str> {
+        Cow::Borrowed("Unknown command")
     }
 }

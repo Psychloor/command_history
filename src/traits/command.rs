@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 /// A trait representing a command that can be executed, undone, and redone within a given context.
 ///
 /// This trait defines the basic operations for a command, including execution, undoing, and redoing.
@@ -15,7 +17,7 @@
 /// # Provided Methods
 ///
 /// * `redo(&self, ctx: &Self::Context)`: Redoes the command by calling `execute`. This method can be overridden if needed.
-/// * `description(&self) -> &str`: Returns a description of the command. The default implementation returns "Unknown command".
+/// * `description(&self) -> Cow<str>`: Returns a description of the command. The default implementation returns "Unknown command".
 ///
 /// # Example
 ///
@@ -75,7 +77,7 @@ pub trait Command {
     /// # Returns
     ///
     /// A string slice that holds the description of the command.
-    fn description(&self) -> &str {
-        "Unknown command"
+    fn description(&self) -> Cow<'_, str> {
+        Cow::Borrowed("Unknown command")
     }
 }
