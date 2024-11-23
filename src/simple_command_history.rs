@@ -21,6 +21,23 @@ impl<C: MutableCommand> SimpleCommandHistory<C> {
             clear_redo_on_execute,
         }
     }
+    #[must_use]
+    pub fn undo_history(&self) -> Option<Vec<&C>> {
+        if self.undo.is_empty() {
+            None
+        } else {
+            Some(self.undo.iter().collect())
+        }
+    }
+
+    #[must_use]
+    pub fn redo_history(&self) -> Option<Vec<&C>> {
+        if self.redo.is_empty() {
+            None
+        } else {
+            Some(self.redo.iter().collect())
+        }
+    }
 
     fn push_undo(&mut self, command: C) {
         while self.undo.len() >= self.history_limit {
@@ -367,5 +384,63 @@ mod tests {
 
         history.set_history_limit(NonZeroUsize::new(3).unwrap());
         assert_eq!(history.undo.len(), 3);
+    }
+
+    #[test]
+    fn test_undo_history() {
+        let mut history = SimpleCommandHistory::new(5, true);
+        let mut ctx = RefCell::new(0);
+
+        let commands = vec![
+            TestCommand { value: 1 },
+            TestCommand { value: 2 },
+            TestCommand { value: 3 },
+        ];
+
+        for command in commands {
+            history.execute_command(command, &mut ctx);
+        }
+
+        let undo_history = history.undo_history().unwrap();
+        assert_eq!(undo_history.len(), 3);
+        assert_eq!(undo_history[0].value, 3);
+        assert_eq!(undo_history[1].value, 2);
+        assert_eq!(undo_history[2].value, 1);
+    }
+
+    #[test]
+    fn test_redo_history() {
+        let mut history = SimpleCommandHistory::new(5, true);
+        let mut ctx = RefCell::new(0);
+
+        let commands = vec![
+            TestCommand { value: 1 },
+            TestCommand { value: 2 },
+            TestCommand { value: 3 },
+        ];
+
+        for command in commands {
+            history.execute_command(command, &mut ctx);
+        }
+
+        history.undo(&mut ctx);
+        history.undo(&mut ctx);
+
+        let redo_history = history.redo_history().unwrap();
+        assert_eq!(redo_history.len(), 2);
+        assert_eq!(redo_history[0].value, 2);
+        assert_eq!(redo_history[1].value, 3);
+    }
+
+    #[test]
+    fn test_undo_history_empty() {
+        let history = SimpleCommandHistory::<TestCommand>::new(5, true);
+        assert!(history.undo_history().is_none());
+    }
+
+    #[test]
+    fn test_redo_history_empty() {
+        let history = SimpleCommandHistory::<TestCommand>::new(5, true);
+        assert!(history.redo_history().is_none());
     }
 }
