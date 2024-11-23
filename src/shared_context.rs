@@ -55,7 +55,7 @@ impl<T> SharedContext<T> {
         self.inner.lock()
     }
 
-    #[allow(clippy::must_use_candidate)]
+    #[must_use]
     pub fn try_lock(&self) -> Option<MutexGuard<'_, T>> {
         self.inner.try_lock()
     }
@@ -65,7 +65,7 @@ impl<T> SharedContext<T> {
     /// # Panics
     ///
     /// Panics if there are multiple references to the `SharedContext`.
-    #[allow(clippy::must_use_candidate)]
+    #[must_use]
     pub fn into_inner(self) -> T {
         Arc::try_unwrap(self.inner)
             .ok()
@@ -200,7 +200,7 @@ mod tests {
     fn test_into_inner_should_panic() {
         let context = SharedContext::new(100);
         let _cloned_context = context.clone();
-        context.into_inner();
+        let _ = context.into_inner();
     }
 
     #[test]
@@ -238,15 +238,15 @@ mod tests {
     #[test]
     fn test_debug() {
         let context = SharedContext::new(5);
-        assert_eq!(format!("{:?}", context), "SharedContext(5)");
+        assert_eq!(format!("{context:?}"), "SharedContext(5)");
         let _guard = context.lock();
-        assert_eq!(format!("{:?}", context), "SharedContext(<locked>)");
+        assert_eq!(format!("{context:?}"), "SharedContext(<locked>)");
     }
 
     #[test]
     fn test_debug_with_mutex_guard() {
         let context = SharedContext::new(5);
         let guard = context.lock();
-        assert_eq!(format!("{:?}", guard), "5");
+        assert_eq!(format!("{guard:?}"), "5");
     }
 }
