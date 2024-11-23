@@ -72,19 +72,6 @@ where
         }
     }
 
-    fn batch_execute(&self, commands: Vec<C>, ctx: &C::Context) {
-        let mut undo = self.undo.lock();
-        for command in commands {
-            command.execute(ctx);
-
-            self.push_undo(command, &mut undo);
-        }
-
-        if self.clear_redo_on_execute.load(Ordering::Relaxed) {
-            self.redo.lock().clear();
-        }
-    }
-
     fn undo(&self, ctx: &C::Context) {
         let mut undo = self.undo.lock();
         if let Some(command) = undo.pop_front() {
@@ -121,11 +108,24 @@ where
             redo.pop_back();
         }
     }
+
+    fn batch_execute(&self, commands: Vec<C>, ctx: &C::Context) {
+        let mut undo = self.undo.lock();
+        for command in commands {
+            command.execute(ctx);
+
+            self.push_undo(command, &mut undo);
+        }
+
+        if self.clear_redo_on_execute.load(Ordering::Relaxed) {
+            self.redo.lock().clear();
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use std::{cmp::min, hint::black_box, num::NonZero, panic::AssertUnwindSafe, thread};
+    use std::{cmp::min, hint::black_box, num::NonZero, panic::AssertUnwindSafe, thread, time};
 
     use rand::Rng;
 
@@ -297,8 +297,8 @@ mod tests {
             let history_clone = history.clone();
             let ctx_clone = ctx.clone();
 
-            handles.push(black_box(std::thread::spawn(move || {
-                thread::sleep(std::time::Duration::from_millis(
+            handles.push(black_box(thread::spawn(move || {
+                thread::sleep(time::Duration::from_millis(
                     rand::thread_rng().gen_range(0..250),
                 ));
                 history_clone.execute_command(command, &ctx_clone);
@@ -322,12 +322,12 @@ mod tests {
             let history_clone = Arc::clone(&history);
             let ctx_clone = ctx.clone();
 
-            handles.push(black_box(std::thread::spawn(move || {
-                thread::sleep(std::time::Duration::from_millis(
+            handles.push(black_box(thread::spawn(move || {
+                thread::sleep(time::Duration::from_millis(
                     rand::thread_rng().gen_range(0..200),
                 ));
                 history_clone.undo(&ctx_clone);
-                thread::sleep(std::time::Duration::from_millis(
+                thread::sleep(time::Duration::from_millis(
                     rand::thread_rng().gen_range(0..200),
                 ));
                 history_clone.redo(&ctx_clone);
