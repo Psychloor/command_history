@@ -242,4 +242,11 @@ mod tests {
         let _guard = context.lock();
         assert_eq!(format!("{:?}", context), "SharedContext(<locked>)");
     }
+
+    #[test]
+    fn test_debug_with_mutex_guard() {
+        let context = SharedContext::new(5);
+        let guard = context.lock();
+        assert_eq!(format!("{:?}", guard), "5");
+    }
 }
