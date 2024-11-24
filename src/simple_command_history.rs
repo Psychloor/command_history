@@ -154,7 +154,7 @@ mod tests {
         history.execute_command(command, &mut ctx);
 
         assert_eq!(*ctx.borrow(), 1);
-        assert!(history.undo.len() == 1);
+        assert_eq!(history.undo.len(), 1);
         assert!(history.redo.is_empty());
     }
 
