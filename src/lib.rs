@@ -13,11 +13,11 @@ pub mod simple_command_history;
 pub mod traits;
 
 pub mod prelude {
-    pub use crate::concurrent_command_history::ConcurrentCommandHistory;
-    pub use crate::shared_context::SharedContext;
-    pub use crate::simple_command_history::SimpleCommandHistory;
-    pub use crate::traits::command::Command;
-    pub use crate::traits::command_history::CommandHistory;
-    pub use crate::traits::mutable_command::MutableCommand;
-    pub use crate::traits::mutable_command_history::MutableCommandHistory;
+	pub use crate::concurrent_command_history::ConcurrentCommandHistory;
+	pub use crate::shared_context::SharedContext;
+	pub use crate::simple_command_history::SimpleCommandHistory;
+	pub use crate::traits::command::Command;
+	pub use crate::traits::command_history::CommandHistory;
+	pub use crate::traits::mutable_command::MutableCommand;
+	pub use crate::traits::mutable_command_history::MutableCommandHistory;
 }
